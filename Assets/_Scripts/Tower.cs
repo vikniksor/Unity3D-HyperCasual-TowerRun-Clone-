@@ -35,4 +35,27 @@ public class Tower : MonoBehaviour
         }
     }
 
+    public List<Character> CollectCharacter(Transform distanceChecker, float fixationMaxDistance)
+    {
+        for (int i = 0; i < _characterInTower.Count; i++)
+        {
+            float distanceBetweenPoints = CheckDistanceY(distanceChecker, _characterInTower[i].fixationPoint.transform);
+
+            if (distanceBetweenPoints < fixationMaxDistance)
+            {
+                List<Character> collectedCharacters = _characterInTower.GetRange(0, i + 1);
+                _characterInTower.RemoveRange(0, i + 1);
+                return collectedCharacters;
+            }
+        }
+        return null;
+    }
+
+    private float CheckDistanceY(Transform distanceChecker, Transform characterFixationPoint)
+    {
+        Vector3 distanceCheckerY = new Vector3(0, distanceChecker.position.y, 0);
+        Vector3 characterFixationPointY = new Vector3(0, characterFixationPoint.position.y, 0);
+        return Vector3.Distance(distanceCheckerY, characterFixationPointY);
+    }
+
 }
