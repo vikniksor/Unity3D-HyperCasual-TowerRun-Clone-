@@ -17,6 +17,7 @@ public class PlayerTower : MonoBehaviour
         _characters = new List<Character>();
         Vector3 spawnPoint = transform.position;
         _characters.Add(Instantiate(_startCharacter, spawnPoint, Quaternion.identity, transform));
+        _characters[0].Run();
     }
 
 
@@ -32,13 +33,19 @@ public class PlayerTower : MonoBehaviour
 
                 if (collectedCharacters != null)
                 {
+                    _characters[0].StopRun();
+
                     for (int i = collectedCharacters.Count - 1; i >= 0; i--)
                     {
                         Character insertCharacter = collectedCharacters[i];
                         InsertCharacter(insertCharacter);
                         DisplaceCheckers(insertCharacter);
                     }
+
+                    _characters[0].Run();
                 }
+
+                collisionTower.Break();
             }        
         }
     }

@@ -58,4 +58,9 @@ public class Tower : MonoBehaviour
         return Vector3.Distance(distanceCheckerY, characterFixationPointY);
     }
 
+    public void Break()
+    {
+        Destroy(gameObject);
+    }
+
 }
