@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerTower : MonoBehaviour
 {
@@ -12,12 +13,16 @@ public class PlayerTower : MonoBehaviour
     private List<Character> _characters;
 
 
+    public UnityAction<int> CharacterAdded;
+
+
     private void Start()
     {
         _characters = new List<Character>();
         Vector3 spawnPoint = transform.position;
         _characters.Add(Instantiate(_startCharacter, spawnPoint, Quaternion.identity, transform));
         _characters[0].Run();
+        CharacterAdded?.Invoke(_characters.Count);
     }
 
 
@@ -42,6 +47,7 @@ public class PlayerTower : MonoBehaviour
                         DisplaceCheckers(insertCharacter);
                     }
 
+                    CharacterAdded?.Invoke(_characters.Count);
                     _characters[0].Run();
                 }
 

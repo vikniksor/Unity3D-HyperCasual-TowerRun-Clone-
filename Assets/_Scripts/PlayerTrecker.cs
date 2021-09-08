@@ -9,6 +9,17 @@ public class PlayerTrecker : MonoBehaviour
     [SerializeField] private Vector3 _offsetRotation;
 
 
+    private void OnEnable()
+    {
+        _playerTower.CharacterAdded += OnCharacterAdded;
+    }
+
+    private void OnDisable()
+    {
+        _playerTower.CharacterAdded -= OnCharacterAdded;
+    }
+
+
     private void Update()
     {
         UpdatePosition();
@@ -23,5 +34,11 @@ public class PlayerTrecker : MonoBehaviour
         Vector3 lookAtPoint = _playerTower.transform.position + _offsetRotation;
 
         transform.LookAt(lookAtPoint);
+    }
+
+    private void OnCharacterAdded(int count)
+    {
+        _offsetPosition += (Vector3.up + Vector3.back) * count;
+        UpdatePosition();
     }
 }
