@@ -26,23 +26,27 @@ public class PlayerTower : MonoBehaviour
         {
             Tower collisionTower = character.GetComponentInParent<Tower>();
 
-            List<Character> collectedCharacters = collisionTower.CollectCharacter(_distanceChecker, _fixationMaxDistance);
-
-            if (collectedCharacters != null)
+            if (collisionTower != null)
             {
-                InsertCharacter(collectedCharacters);
-            }
+                List<Character> collectedCharacters = collisionTower.CollectCharacter(_distanceChecker, _fixationMaxDistance);
+
+                if (collectedCharacters != null)
+                {
+                    for (int i = collectedCharacters.Count - 1; i >= 0; i--)
+                    {
+                        Character insertCharacter = collectedCharacters[i];
+                        InsertCharacter(insertCharacter);
+                        DisplaceCheckers(insertCharacter);
+                    }
+                }
+            }        
         }
     }
 
-    private void InsertCharacter(List<Character> collectedCharacters)
+    private void InsertCharacter(Character collectedCharacter)
     {
-        for (int i = collectedCharacters.Count - 1; i >= 0; i--)
-        {
-            Character insertCharacter = collectedCharacters[i];
-            _characters.Insert(0, insertCharacter);
-            SetCharacterPosition(insertCharacter);
-        }
+        _characters.Insert(0, collectedCharacter);
+        SetCharacterPosition(collectedCharacter);
     }
 
     private void SetCharacterPosition(Character character)
@@ -50,6 +54,16 @@ public class PlayerTower : MonoBehaviour
         character.transform.parent = transform;
         character.transform.localPosition = new Vector3(0, character.transform.localPosition.y, 0);
         character.transform.rotation = Quaternion.identity;
+    }
+
+    private void DisplaceCheckers(Character character)
+    {
+        float displaceScale = 0.8f;
+        Vector3 distanceCheckerNewPosition = _distanceChecker.position;
+        distanceCheckerNewPosition.y -= character.transform.localScale.y * displaceScale;
+        _distanceChecker.position = distanceCheckerNewPosition;
+        _checkCollider.center = _distanceChecker.localPosition;
+
     }
 
 }
